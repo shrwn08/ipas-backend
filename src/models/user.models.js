@@ -6,7 +6,7 @@ const passwordRegex =
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    fullname: {
       type: String,
       required: [true, "User's name is required "],
       min: 2,
@@ -20,11 +20,17 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
     },
-    validate: {
+    password : {
+        type : String,
+        required : [true, "Password is required"],
+        select : false,
+        validate: {
       validator: (value) => passwordRegex.test(value),
       message:
         "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, a number and a special character",
-    },
+    }
+    }
+    ,
   },
   { timestamps: true },
 );

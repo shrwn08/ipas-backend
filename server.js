@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./src/config/connectDB.js"
+import authRoutes from "./src/routes/auth.routes.js"
 dotenv.config();
 
 
@@ -30,6 +31,9 @@ connectDB()
         console.error("unable to connect the MongoDB ", error.message);
         process.exit(1);
     });
+
+
+app.use("/api", authRoutes);
 
      app.listen(PORT, () => console.log("Server is running on PORT ", PORT));
 
