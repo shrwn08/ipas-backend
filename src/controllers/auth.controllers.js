@@ -1,5 +1,30 @@
 import User from "../models/user.models.js";
+import { asyncHandler } from "../utils/asyncHandler .js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
-export const login = async (req, res)=>{
-  
-}
+export const login = asyncHandler(async (req, res) => {
+  const email = String(req.body.email || "")
+    .trim()
+    .toLowerCase();
+  const password = String(req.body.password || "");
+
+  if (!email || !password) {
+    throw httpError(400, "Email and password are required.");
+  }
+
+  const user = await User.findOne({ email }).select("+password");
+
+  const match = user ? await bcrypt.compare(password, user.password) : false;
+
+  if (!match) throw httpError(401, "Invalid email or password.");
+
+  await User.updateOne({ _id: user._id }, { $set: { lastLogin: new Date() } });
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+
+  res.status(200).json({ success: true, token, user });
+});
