@@ -21,6 +21,12 @@ const admins = [
     password: process.env.ADMIN3_PASSWORD,
     mobile_no: "",
   },
+  {
+    fullname: "Shrawan",
+    email: "shrwnkumar07@gmail.com",
+    password: process.env.ADMIN3_PASSWORD,
+    mobile_no: "",
+  },
 ];
 
 const seed = async () => {
