@@ -19,3 +19,10 @@ export const authLimiter = build(
 );
 
 
+export const enquiryLimiter = build(
+60 * 60 * 1000,
+5,
+"Too many messages sent. Please try again later."
+);
+
+
