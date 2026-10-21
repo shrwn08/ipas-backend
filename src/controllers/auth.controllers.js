@@ -1,7 +1,9 @@
 import User from "../models/user.models.js";
 import { asyncHandler } from "../utils/asyncHandler .js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import { httpError } from "../utils/httpError.js";
 dotenv.config();
 
 export const login = asyncHandler(async (req, res) => {
@@ -28,3 +30,7 @@ export const login = asyncHandler(async (req, res) => {
 
   res.status(200).json({ success: true, token, user });
 });
+
+export const getMe = (req, res) => {
+res.status(200).json({ success: true, user: req.user });
+};
