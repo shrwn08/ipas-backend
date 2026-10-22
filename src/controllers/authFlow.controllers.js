@@ -100,7 +100,7 @@ export const verifyCode = async (req, res) => {
       !user.tempPasswordExpires ||
       user.tempPasswordExpires < new Date()
     ) {
-      return invaild();
+      return invalid();
     }
 
     if (user.tempPasswordAttempts >= MAX_ATTEMPTS) {
@@ -128,7 +128,7 @@ export const verifyCode = async (req, res) => {
       },
     );
 
-    const resetToken = jwt.sign(
+    const resetToken = Jwt.sign(
       { id: user._id, purpose: "password-change" },
       resetSecret(),
       { expiresIn: "10m" },
@@ -150,7 +150,7 @@ export const setPassword = async (req, res) => {
 
     let payload;
     try {
-      payload = jwt.verify(String(resetToken || ""), resetSecret());
+      payload = Jwt.verify(String(resetToken || ""), resetSecret());
     } catch {
       return res.status(401).json({
         success: false,
@@ -177,7 +177,7 @@ export const setPassword = async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = Jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
